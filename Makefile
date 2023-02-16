@@ -23,8 +23,4 @@ fclean : clean
 
 re : fclean all
 
-norm:
-	norminette | grep -v "OK" || true
-
-
 .PHONY : all clean fclean re
