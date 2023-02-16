@@ -1,0 +1,101 @@
+﻿option pour compilation = gcc -pthread main.c
+option fsanitize = -fsanitize=thread -g
+librairie = #include <pthread.h>
+
+#VALGRIND = valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes
+#HELGRIND = valgrind --tool=helgrind
+
+possibles ameliorations au projet :
+- fractionner les usleeps pour gerer les cas du type ./philo 4 500 200000 200000. Permet d'arreter plus rapidement les threads
+- changer le monitoring en creant le thread monitor dans la boucle de routine
+       while (1)
+        {
+                pthread_create(gmawkgamwkgmawk).....
+        	}
+- changer les ID en message pour economiser des lignes pour printf
+
+-----------------------------------------------------------
+créer un thread
+
+
+
+
+int pthread_create(pthread_t *restrict thread, const pthread_attr_t *restrict attr,
+                                        void *(*start_routine)(void *), void *restrict arg);
+
+
+thread = pointeur vers variable p_thread (stocke l'id du thread qu'on va creer)
+attr = arg pour changer les attributs du thread, ici pas besoin donc mettre NULL
+start_routine = fonction par laquelle le thread commence son exécution.
+Cette fonction doit avoir pour prototype void *nom_de_fonction_au_choix(void *arg);. 
+arg : le pointeur vers un argument à transmettre à la fonction start_routine du thread.
+Pour passer plusieurs paramètres à cette fonction, il faudra lui renseigner ici un pointeur vers une structure.
+
+
+Lorsque la fonction pthread_create termine, la variable thread qu’on lui a fournie contiendra l’identifiant du thread créé.
+La fonction elle-même renvoie 0 si la création s’est bien passée, ou une autre valeur s’il y a eu une erreur.
+
+
+-------------------------------------------------------------
+pour bloquer un thread en attendant qu'un autre se termine
+
+
+int pthread_join(pthread_t thread, void **retval);
+>> La  fonction  pthread_join() attend  que le thread spécifié par thread se termine. Si ce
+       thread s'est déjà terminé, pthread_join() revient tout de suite. Le  thread  spécifié  par
+       thread doit être joignable.
+
+
+thread = id du thread qu'on attend (doit etre un thread joignable cad non detache)
+retval = pointeur vers la var contenant la valeur de retour de la fontion routin du thread (start_routine)
+ici pas besoin, donc mettre NULL
+
+
+renvoie 0 si succes, sinon un entier pour code erreur
+
+
+--------------------------------------------------------------
+pour detacher un thread
+
+
+int pthread_detach(pthread_t thread);
+
+
+>> La  fonction  pthread_detach() marque l'identifiant de thread identifié par thread comme
+       détaché. Quand un thread détaché se termine, ses ressources sont  automatiquement rendues
+       au système sans avoir besoin d'un autre thread pour joindre le thread terminé.
+
+
+       Essayer de détacher un thread qui est déjà détaché résulte en un comportement indéfini.
+
+
+renvoie 0 si succes, sinon un entier pour code erreur
+
+
+Data race = situation de compétition ou acces concurrent
+Les threads accèdent souvent a la même zone mémoire en meme temps => une variable partagée entre les threads peut être modifié en meme temps par chacun des threads et créer une erreur de synchronisation entre les threads, car l’ordre des accès est indéterminé.
+ll faut utiliser des mutex (verrous) exclusifs à chaque thread pour contrôler les accès à la mémoire et empêcher que les ressources partagées soient utilisées en même temps.
+
+
+Vérifier les data race:
+gcc -fsanitize=thread -g threads.c && ./a.out
+
+
+—-----------------------------------------------------------------
+creer un mutex
+
+
+declaration de variable =  pthread_mutex_t    mutex;
+
+
+initialisation
+int pthread_mutex_init(pthread_mutex_t *mutex, const pthread_mutexattr_t *mutexattr);
+
+
+* mutex : le pointeur vers une variable de type pthread_mutex_t.
+* mutexattr : un pointeur vers des attributs spécifiques pour le mutex. ici, on mettra  NULL.
+Renvoie toujours 0.
+
+
+—------------------------------------------------------------------
+Verrouiller et déverrouiller un mutex
