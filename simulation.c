@@ -6,7 +6,7 @@
 /*   By: mvicedo <mvicedo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 18:16:34 by mvicedo           #+#    #+#             */
-/*   Updated: 2023/02/16 15:07:51 by mvicedo          ###   ########.fr       */
+/*   Updated: 2023/02/17 18:41:07 by mvicedo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ void	wait_philo(t_philo *philo)
 {
 	if (philo->id % 2)
 		usleep(philo->data->time_sleep * 1000);
-	if (philo->id > 50)
-		usleep(philo->id * 1500);
+	//if (philo->id > 50)
+	usleep(philo->id * 2000);
 }
 
 void	*philosophers(void *arg)
