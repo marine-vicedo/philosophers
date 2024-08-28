@@ -42,6 +42,7 @@ State changes for philosophers must be logged as:
 - timestamp_in_ms | X is sleeping
 - timestamp_in_ms | X is thinking
 - timestamp_in_ms | X died
+  
 *Replace timestamp_in_ms with the current timestamp in milliseconds and X with the philosopher's number.*
 
 Logs must be consistent, with no overlap between messages. A death message should be logged within 10 ms of the philosopher's death.
