@@ -21,7 +21,7 @@ Philosophers do not communicate with each other and are unaware if another philo
 The program should accept the following arguments (in this order):
 
 `
-./philo <philo_nb> <time_to_die> < time_to_eat> <time_to_sleep>  <number_of_times_each_philosopher_must_eat>
+./philo <philo_nb> <time_to_die> < time_to_eat> <time_to_sleep> <number_of_times_each_philosopher_must_eat>
 `
 
 |  Arguments  |  Description |
